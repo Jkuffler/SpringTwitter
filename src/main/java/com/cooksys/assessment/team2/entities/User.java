@@ -1,5 +1,6 @@
 package com.cooksys.assessment.team2.entities;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -7,6 +8,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @NoArgsConstructor
 @Data
 @Table(name = "user_table")
