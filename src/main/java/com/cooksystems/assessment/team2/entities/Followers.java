@@ -1,7 +1,8 @@
-package com.cooksys.assessment.team2.entities;
+package com.cooksystems.assessment.team2.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -13,9 +14,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "followers_following")
 public class Followers {
 	
-	@ManyToMany
+	@ManyToOne
+	@JoinColumn
 	private int follower_id;
-	@ManyToMany
+	@ManyToOne()
 	private int following_id;
 
 }
