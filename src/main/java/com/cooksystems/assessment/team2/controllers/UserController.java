@@ -3,9 +3,12 @@ package com.cooksystems.assessment.team2.controllers;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksystems.assessment.team2.mappers.UserMapper;
+import com.cooksystems.assessment.team2.model.UserRequestDto;
 import com.cooksystems.assessment.team2.model.UserResponseDto;
 import com.cooksystems.assessment.team2.services.UserService;
 
@@ -21,6 +24,11 @@ public class UserController {
 	@GetMapping
 	public List<UserResponseDto> getAllUsers() {
 		return userService.getAllUsers();
+	}
+	
+	@PostMapping
+	public UserResponseDto createUser (UserRequestDto userRequestDto) {
+		
 	}
 	
 
