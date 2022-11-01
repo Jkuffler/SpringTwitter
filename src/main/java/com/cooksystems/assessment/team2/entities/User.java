@@ -42,10 +42,5 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Tweet> tweets;
 	
-	@OneToMany(mappedBy = "user")
-	private List<UserLikes> userLikes;
-	
-	@OneToMany(mappedBy = "user")
-	private List<UserMentions> userMentions;
 
 }

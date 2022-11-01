@@ -1,17 +1,17 @@
 package com.cooksystems.assessment.team2.controllers;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksystems.assessment.team2.services.UserService;
 
 import lombok.AllArgsConstructor;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("user")
 public class UserController {
 	
-	private final UserService userService;
+	private UserService userService;
 
 }
