@@ -1,7 +1,6 @@
 package com.cooksys.assessment.team2.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -10,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "followers_following")
-public class Followers {
+@Table(name = "tweet_hashtags")
+public class TweetHashtags {
 	
-	@ManyToMany
-	private int follower_id;
-	@ManyToMany
-	private int following_id;
+	private int tweet_id;
+	
+	private int hashtag_id;
+	
 
 }
