@@ -1,4 +1,4 @@
-package com.cooksys.assessment.team2.entities;
+package com.cooksys.assessment.team2.api.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
