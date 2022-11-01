@@ -1,4 +1,4 @@
-package com.cooksystems.assessment.team2.model;
+package com.cooksystems.assessment.team2.api.dtos;
 
 import java.util.List;
 

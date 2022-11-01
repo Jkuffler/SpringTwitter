@@ -1,4 +1,4 @@
-package com.cooksystems.assessment.team2.entities;
+package com.cooksystems.assessment.team2.api.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,24 +11,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "tweet")
-public class Tweet {
+@Table(name = "hashtag")
+public class Hashtag {
 	
 	@Id
 	@GeneratedValue
 	private Long id;
 	
-	private int author;
+	private String label;
 	
-	private String posted;
+	private String firstUsed;
 	
-	private boolean deleted;
-	
-	private String content;
-	
-	private int inReplyTo;
-	
-	private int repostOf;
-	
-	
+	private String lastUsed;
+
 }

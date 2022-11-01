@@ -1,4 +1,4 @@
-package com.cooksystems.assessment.team2.entities;
+package com.cooksystems.assessment.team2.api.entities;
 
 import java.util.List;
 

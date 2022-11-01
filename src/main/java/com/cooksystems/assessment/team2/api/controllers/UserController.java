@@ -1,13 +1,15 @@
-package com.cooksystems.assessment.team2.controllers;
+package com.cooksystems.assessment.team2.api.controllers;
 
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cooksystems.assessment.team2.model.UserResponseDto;
-import com.cooksystems.assessment.team2.services.UserService;
+import com.cooksystems.assessment.team2.api.dtos.UserRequestDto;
+import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
+import com.cooksystems.assessment.team2.api.services.UserService;
 
 import lombok.AllArgsConstructor;
 
@@ -21,6 +23,12 @@ public class UserController {
 	@GetMapping
 	public List<UserResponseDto> getAllUsers() {
 		return userService.getAllUsers();
+	}
+	
+	@PostMapping
+	public UserResponseDto createUser (UserRequestDto userRequestDto) {
+		return null;
+		
 	}
 	
 
