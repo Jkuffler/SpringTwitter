@@ -1,7 +1,5 @@
 package com.cooksystems.assessment.team2.api.dtos;
 
-import java.util.List;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +11,6 @@ public class UserResponseDto {
 	
 	private boolean deleted;
 
-	public List<TweetResponseDto> tweets;
+	private String email;
 
 }
