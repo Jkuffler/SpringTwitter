@@ -3,6 +3,7 @@ package com.cooksystems.assessment.team2.api.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -30,5 +31,7 @@ public class Tweet {
 	
 	private int repostOf;
 	
+	@ManyToOne()
+	User user;
 	
 }
