@@ -1,4 +1,4 @@
-package com.cooksys.assessment.team2.api;
+package com.cooksystems.assessment.team2.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
