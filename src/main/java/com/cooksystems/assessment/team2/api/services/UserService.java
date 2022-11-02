@@ -6,7 +6,7 @@ import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 
 public interface UserService {
 
-	List<UserResponseDto> getAllUsers();
+//	List<UserResponseDto> getAllUsers();
 
 	
 
