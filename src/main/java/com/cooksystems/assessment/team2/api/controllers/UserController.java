@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.services.UserService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("users")
 public class UserController {
 	
-	private UserService userService;
+//	private UserService userService;
 	
-	@GetMapping
-	public List<UserResponseDto> getAllUsers() {
-		return userService.getAllUsers();
-	}
+//	@GetMapping
+//	public List<UserResponseDto> getAllUsers() {
+//		return userService.getAllUsers();
+//	}
 	
 //	@PostMapping
 //	public UserResponseDto createUser (UserRequestDto userRequestDto) {

@@ -10,7 +10,7 @@ import com.cooksystems.assessment.team2.api.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	Optional<User> findByIdLong(Long id);
+//	Optional<User> findByIdLong(Long id);
 	
 	
 
