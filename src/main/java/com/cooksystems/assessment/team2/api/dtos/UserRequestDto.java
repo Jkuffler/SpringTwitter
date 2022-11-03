@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserRequestDto {
 	
-	private String userName;
+	private CredentialsDto credentials;
 	
-	private String joined;
+	private ProfileDto profile;
 	
 	
 }
