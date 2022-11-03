@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksystems.assessment.team2.api.dtos.UserRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.mappers.UserMapper;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
@@ -21,7 +22,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserResponseDto> getAllUsers() {
-		return userMapper.entitiesToResponseDtos(userRepository.findAll());
+		
+		return userMapper.entitiesToResponseDtos(userRepository.findAllByDeletedFalse());
 	}
+
+	@Override
+	public UserResponseDto createUser(UserRequestDto userRequestDto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//	@Override
+//	public UserResponseDto createUser(UserRequestDto userRequestDto) {
+//		User userToSave = userMapper.requestDtoToEntity(userRequestDto);
+//		return null;
+//	}
 
 }
