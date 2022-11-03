@@ -35,16 +35,4 @@ public class UserServiceImpl implements UserService {
 		return userMapper.entityToDto(userRepository.saveAndFlush(savedUser));
 	}
 
-	@Override
-	public UserResponseDto createUser(UserRequestDto userRequestDto) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-//	@Override
-//	public UserResponseDto createUser(UserRequestDto userRequestDto) {
-//		User userToSave = userMapper.requestDtoToEntity(userRequestDto);
-//		return null;
-//	}
-
 }
