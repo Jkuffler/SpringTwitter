@@ -1,10 +1,10 @@
 package com.cooksystems.assessment.team2.api.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class UserRequestDto {
 	
