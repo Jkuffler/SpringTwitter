@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
+	
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
