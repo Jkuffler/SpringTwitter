@@ -11,6 +11,4 @@ public interface UserService {
 	
 	UserResponseDto createUser(UserRequestDto userRequestDto);
 
-	UserResponseDto createUser(UserRequestDto userRequestDto);
-
 }

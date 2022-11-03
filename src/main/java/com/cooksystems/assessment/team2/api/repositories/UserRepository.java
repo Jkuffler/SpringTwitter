@@ -12,7 +12,7 @@ import com.cooksystems.assessment.team2.api.entities.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 //	Optional<User> findByIdLong(Long id);
-<
+
 	
 	List<User> findAllByDeletedFalse();
 
