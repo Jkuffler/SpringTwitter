@@ -8,6 +8,8 @@ import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 public interface UserService {
 
 	List<UserResponseDto> getAllUsers();
+	
+	UserResponseDto createUser(UserRequestDto userRequestDto);
 
 	UserResponseDto createUser(UserRequestDto userRequestDto);
 

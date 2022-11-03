@@ -13,22 +13,24 @@ import com.cooksystems.assessment.team2.api.exceptions.BadRequestException;
 import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 
+
 @ControllerAdvice(basePackages = { "com.cooksystems.assessment.team2.api.controllers"})
 @ResponseBody
 public class AssessmentControllerAdvice {
-	
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(BadRequestException.class)
 	public ErrorDto handleBadRequestException(HttpServletRequest request, BadRequestException badRequestException) {
 		return new ErrorDto(badRequestException.getMessage());
 	}
-	
+
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(NotAuthorizedException.class)
-	public ErrorDto handleNotAuthorizedException(HttpServletRequest request, NotAuthorizedException notAuthorizedException) {
+	public ErrorDto handleNotAuthorizedException(HttpServletRequest request,
+			NotAuthorizedException notAuthorizedException) {
 		return new ErrorDto(notAuthorizedException.getMessage());
 	}
-	
+
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(NotFoundException.class)
 	public ErrorDto handleNotFoundException(HttpServletRequest request, NotFoundException notFoundException) {
