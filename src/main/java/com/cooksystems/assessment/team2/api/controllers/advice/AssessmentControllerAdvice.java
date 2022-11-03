@@ -13,11 +13,8 @@ import com.cooksystems.assessment.team2.api.exceptions.BadRequestException;
 import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 
-<<<<<<< HEAD
-@ControllerAdvice(basePackages = { "com.cooksystems.assessment.team2.api.controllers" })
-=======
+
 @ControllerAdvice(basePackages = { "com.cooksystems.assessment.team2.api.controllers"})
->>>>>>> ff01535d90f7a8e3a7d107c5500ba3ef7519890a
 @ResponseBody
 public class AssessmentControllerAdvice {
 
