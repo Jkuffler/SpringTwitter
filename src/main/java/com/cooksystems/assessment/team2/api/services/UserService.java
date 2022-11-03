@@ -8,6 +8,8 @@ public interface UserService {
 
 	List<UserResponseDto> getAllUsers();
 
+
+
 	
 
 }
