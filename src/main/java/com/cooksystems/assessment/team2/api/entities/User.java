@@ -3,6 +3,7 @@ package com.cooksystems.assessment.team2.api.entities;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class User {
 
 	private boolean deleted = false;
 
-	@OneToMany(mappedBy = "author")
+	@OneToMany(mappedBy = "author", cascade = (CascadeType.ALL))
 	private List<Tweet> tweets;
 	
 	@Embedded
@@ -44,9 +45,10 @@ public class User {
 	@Embedded
 	private Credentials credentials;
 	
+	
 	@ManyToMany
 	@JoinTable(name = "user_likes", joinColumns = @JoinColumn (name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "tweet_id") )
+	inverseJoinColumns = @JoinColumn(name = "tweet_id"))
 	private List<Tweet> likedTweets;
 	
 	@ManyToMany(mappedBy = "mentionedUsers")

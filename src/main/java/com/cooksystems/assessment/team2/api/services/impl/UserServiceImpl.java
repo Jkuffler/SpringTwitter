@@ -15,12 +15,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-///	private final UserRepository userRepository;
-//	private final UserMapper userMapper;
+	private final UserRepository userRepository;
 
-//	@Override
-//	public List<UserResponseDto> getAllUsers() {
-//		return userMapper.entitiesToResponseDtos(userRepository.findAll());
-//	}
+	private final UserMapper userMapper;
+
+	@Override
+	public List<UserResponseDto> getAllUsers() {
+		return userMapper.entitiesToResponseDtos(userRepository.findAll());
+	}
 
 }

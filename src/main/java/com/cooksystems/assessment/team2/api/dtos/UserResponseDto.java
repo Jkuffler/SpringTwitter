@@ -12,5 +12,9 @@ public class UserResponseDto {
 	private boolean deleted;
 
 	private String email;
+	
+
+	
+	
 
 }
