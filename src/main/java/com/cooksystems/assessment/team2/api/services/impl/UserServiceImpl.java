@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	private final UserMapper userMapper;
-	
+
 	private final TweetMapper tweetMapper;
 
 	private List<TweetResponseDto> feed;
@@ -126,29 +126,32 @@ public class UserServiceImpl implements UserService {
 		List<Tweet> listOfTweets = user.getTweets();
 		Collections.sort(listOfTweets);
 		Collections.reverse(listOfTweets);
-		
+
 		return tweetMapper.entitiesToDto(listOfTweets);
 	}
 
-//	@Override
-//	public List<TweetResponseDto> getFeedByAuthor(String username) {
-//		User user =	findUser(username);
-//		user.getFollowers();		
-//		
-//		return null;
-//	}
-
 	@Override
-	public List<TweetResponseDto> getFeedByAuthor() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TweetResponseDto> getFeedByAuthor(String username) {
+		User user = findUser(username);
+		List<Tweet> listOfTweets = user.getTweets();
+		for (User user1 : user.getFollowing()) {
+			listOfTweets.addAll(user1.getTweets());
+		}
+		Collections.sort(listOfTweets);
+		Collections.reverse(listOfTweets);
+
+		return tweetMapper.entitiesToResponseDtos(listOfTweets);
 	}
 
+	/*
+	 * Try to also implement filter that does not include deleted followers
+	 */
+
 	@Override
-	public UserResponseDto getFollowing(String username, UserRequestDto userRequestDto) {
+	public List<UserResponseDto> getFollowing(String username) {
 		User user = findUser(username);
-		userRequestDto = (UserRequestDto) user.getFollowers();
-		return null;
+
+		return userMapper.entitiesToResponseDtos(user.getFollowing());
 	}
 
 }
