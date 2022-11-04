@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksystems.assessment.team2.api.dtos.ContextDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
@@ -76,6 +77,16 @@ public class TweetController {
 	@GetMapping("/{id}/replies")
 	public List<TweetResponseDto> getTweetReplies(@PathVariable Long id) {
 		return tweetService.getTweetReplies(id);
+	}
+	
+	@GetMapping("/{id}/mentions")
+	public List<UserResponseDto> getTweetMentions(@PathVariable Long id){
+		return tweetService.getTweetMentions(id);
+	}
+	
+	@GetMapping("/{id}/context")
+	public ContextDto getTweetContext(@PathVariable Long id) {
+		return tweetService.getTweetContext(id);
 	}
 	
 	
