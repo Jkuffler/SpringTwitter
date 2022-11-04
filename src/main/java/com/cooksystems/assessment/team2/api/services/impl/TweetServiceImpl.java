@@ -7,12 +7,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksystems.assessment.team2.api.dtos.ContextDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.entities.Credentials;
 import com.cooksystems.assessment.team2.api.entities.Tweet;
 import com.cooksystems.assessment.team2.api.entities.User;
+import com.cooksystems.assessment.team2.api.exceptions.BadRequestException;
 import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
@@ -58,6 +60,15 @@ public class TweetServiceImpl implements TweetService {
 		if (!user.getCredentials().equals(credentials)) {
 			throw new NotAuthorizedException("Invalid credentials: " + credentials);
 		}
+	}
+	
+	private void checkTweetRequest(TweetRequestDto tweetRequestDto) {
+
+		if (tweetRequestDto.getCredentials() == null || tweetRequestDto.getCredentials().getUserName() == null
+				|| tweetRequestDto.getCredentials().getPassword() == null || tweetRequestDto.getContent() == null) {
+			throw new BadRequestException("Something you entered is null, try again.");
+		}
+
 	}
 
 	@Override
@@ -115,6 +126,83 @@ public class TweetServiceImpl implements TweetService {
 		
 		tweetRepository.saveAndFlush(tweetToLike);
 	}
+
+	@Override
+	public TweetResponseDto repostTweet(Long id, Credentials credentials) {
+		Tweet tweetToRepost = findTweet(id);
+		TweetRequestDto tweetRequest = tweetMapper.entityToRequestDto(tweetToRepost);
+		checkCredentials(credentials);
+		Tweet repostedTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequest);
+
+		User user = findUser(credentials.getUserName());
+		repostedTweet.setAuthor(user);
+		repostedTweet.setContent(tweetToRepost.getContent());
+		repostedTweet.setRepostOf(tweetToRepost);
+
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(repostedTweet));
+	}
+	
+	@Override
+	public List<TweetResponseDto> getReposts(Long id) {
+		Tweet tweetToFind = findTweet(id); 
+		List<Tweet> repostsToTweet = tweetToFind.getReposts();
+		
+		return tweetMapper.entitiesToResponseDtos(repostsToTweet);
+	}
+	
+	@Override
+	public TweetResponseDto tweetReply(Long id, TweetRequestDto tweetRequestDto) {
+		Tweet tweetToReplyTo = findTweet(id);
+
+		checkTweetRequest(tweetRequestDto);
+		
+		User user = findUser(tweetRequestDto.getCredentials().getUserName());
+		Tweet replyTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
+		List<Tweet> tweetReplies = tweetToReplyTo.getReplies();
+		
+		replyTweet.setAuthor(user);
+		replyTweet.setInReplyTo(tweetToReplyTo);
+		tweetReplies.add(replyTweet);
+
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(replyTweet));
+
+	}
+	
+	public List<TweetResponseDto> getTweetReplies(Long id) {
+		Tweet tweetToFind = findTweet(id);
+		List<Tweet> repliesToTweet = tweetToFind.getReplies();
+		
+		return tweetMapper.entitiesToResponseDtos(repliesToTweet);
+	}
+	
+	@Override
+	public List<UserResponseDto> getTweetMentions(Long id) {
+		Tweet tweetToFind = findTweet(id);
+		List<User> mentionedUsers = tweetToFind.getMentionedUsers();
+			
+		return userMapper.entitiesToResponseDtos(mentionedUsers);
+	}
+	
+	@Override
+	public ContextDto getTweetContext(Long id) {
+		Tweet tweetToFind = findTweet(id);
+		ContextDto context = new ContextDto();
+		List<TweetResponseDto> tweetList = new ArrayList<>();
+		Tweet currentTweet = tweetToFind;
+		
+		context.setTarget(tweetMapper.entityToDto(tweetToFind));
+		context.setAfter(tweetMapper.entitiesToResponseDtos(tweetToFind.getReplies()));
+		
+		while(currentTweet.getInReplyTo() != null) {
+			tweetList.add(tweetMapper.entityToDto(currentTweet.getInReplyTo()));
+			currentTweet = currentTweet.getInReplyTo();
+		}
+		
+		context.setBefore(tweetList);
+		
+		return context;
+	}
+	
 	
 
 }
