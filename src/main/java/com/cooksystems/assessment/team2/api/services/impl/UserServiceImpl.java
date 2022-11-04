@@ -193,5 +193,14 @@ public class UserServiceImpl implements UserService {
 
 		return tweetMapper.entitiesToResponseDtos(listOfTweets);
 	}
+	
+	@Override
+	public List<TweetResponseDto> getUserMentions(String username) {
+		User user = findUser(username);
+		List<Tweet> mentions = user.getMentionedTweets();
+		Collections.sort(mentions);
+		Collections.reverse(mentions);
+		return tweetMapper.entitiesToResponseDtos(mentions);
+	}
 
 }
