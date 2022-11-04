@@ -128,5 +128,57 @@ public class UserServiceImpl implements UserService {
 		
 		return tweetMapper.entitiesToDto(listOfTweets);
 	}
+	
+	@Override
+	public List<UserResponseDto> followers(String username) {
+		User user = findUser(username);
+		return userMapper.entitiesToResponseDtos(user.getFollowers());
+	}
+
+	@Override
+	public void follow(String username, Credentials credentials) {
+		checkCredentials(credentials);
+		User userToFollow = findUser(username);
+		User follower = findUser(credentials.getUserName());
+		
+		List<User> following = follower.getFollowing();
+		
+		if (following.contains(userToFollow)) {
+			throw new BadRequestException("You are already following the user.");
+		} else {
+			following.add(userToFollow);
+		}
+		
+		follower.setFollowing(following);
+		
+		userRepository.saveAndFlush(follower);
+		
+	}
+
+	@Override
+	public void unfollow(String username, Credentials credentials) {
+		checkCredentials(credentials);
+		User userToUnfollow = findUser(username);
+		User unfollower = findUser(credentials.getUserName());
+		
+		List<User> following = unfollower.getFollowing();
+		
+		if (following.contains(userToUnfollow)) {
+			following.remove(userToUnfollow);
+		} else {
+			throw new BadRequestException("You are not following the user.");
+		}
+		
+		unfollower.setFollowing(following);
+		
+		userRepository.saveAndFlush(unfollower);
+		
+	}
+	
+	@Override
+	public List<UserResponseDto> following(String username) {
+		User user = findUser(username);
+		return userMapper.entitiesToResponseDtos(user.getFollowing());
+	}
 
 }
