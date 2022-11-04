@@ -18,7 +18,6 @@ import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
 import com.cooksystems.assessment.team2.api.mappers.UserMapper;
-import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
 import com.cooksystems.assessment.team2.api.services.UserService;
 
@@ -33,6 +32,8 @@ public class UserServiceImpl implements UserService {
 	private final UserMapper userMapper;
 	
 	private final TweetMapper tweetMapper;
+
+	private List<TweetResponseDto> feed;
 
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
@@ -120,8 +121,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<TweetResponseDto> getTweetsbyAuthor(String userName) {
-		User user = findUser(userName);
+	public List<TweetResponseDto> getTweetsbyAuthor(String username) {
+		User user = findUser(username);
 		List<Tweet> listOfTweets = user.getTweets();
 		Collections.sort(listOfTweets);
 		Collections.reverse(listOfTweets);
@@ -179,6 +180,27 @@ public class UserServiceImpl implements UserService {
 	public List<UserResponseDto> following(String username) {
 		User user = findUser(username);
 		return userMapper.entitiesToResponseDtos(user.getFollowing());
+	}
+
+//	@Override
+//	public List<TweetResponseDto> getFeedByAuthor(String username) {
+//		User user =	findUser(username);
+//		user.getFollowers();		
+//		
+//		return null;
+//	}
+
+	@Override
+	public List<TweetResponseDto> getFeedByAuthor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserResponseDto getFollowing(String username, UserRequestDto userRequestDto) {
+		User user = findUser(username);
+		userRequestDto = (UserRequestDto) user.getFollowers();
+		return null;
 	}
 
 }
