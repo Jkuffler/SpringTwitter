@@ -6,7 +6,6 @@ import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.dtos.UserRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.entities.Credentials;
-import com.cooksystems.assessment.team2.api.entities.Tweet;
 
 public interface UserService {
 
@@ -21,5 +20,9 @@ public interface UserService {
 	UserResponseDto getUserByUserName(String userName);
 
 	List<TweetResponseDto> getTweetsbyAuthor(String userName);
+
+	List<TweetResponseDto> getFeedByAuthor();
+
+	UserResponseDto getFollowing(String username, UserRequestDto userRequestDto);
 
 }
