@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksystems.assessment.team2.api.dtos.ContextDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
@@ -75,5 +76,38 @@ public class TweetController {
 	public void likedTweet(@PathVariable Long id, @RequestBody Credentials credentials) {
 		tweetService.likedTweet(id, credentials);
 	}
+	
+	@PostMapping("/{id}/repost")
+	public TweetResponseDto repostTweet(@PathVariable Long id, @RequestBody Credentials credentials) {
+		return tweetService.repostTweet(id, credentials);
+	}
+	
+	@GetMapping("/{id}/reposts")
+	public List<TweetResponseDto> getReposts(@PathVariable Long id) {
+		return tweetService.getReposts(id);
+	}
+	
+	@PostMapping("/{id}/reply")
+	public TweetResponseDto tweetReply(@PathVariable Long id, @RequestBody TweetRequestDto tweetRequestDto) {
+		return tweetService.tweetReply(id, tweetRequestDto);
+	}
+	
+	@GetMapping("/{id}/replies")
+	public List<TweetResponseDto> getTweetReplies(@PathVariable Long id) {
+		return tweetService.getTweetReplies(id);
+	}
+	
+	@GetMapping("/{id}/mentions")
+	public List<UserResponseDto> getTweetMentions(@PathVariable Long id){
+		return tweetService.getTweetMentions(id);
+	}
+	
+	@GetMapping("/{id}/context")
+	public ContextDto getTweetContext(@PathVariable Long id) {
+		return tweetService.getTweetContext(id);
+	}
+	
+	
+
 
 }
