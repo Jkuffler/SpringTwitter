@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserResponseDto deleteUser(String username, Credentials credentials) {
+	public UserResponseDto deleteUserByUsername(String username, Credentials credentials) {
 		User userToDelete = findUser(username);
 
 		checkCredentials(credentials);
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserResponseDto updateUser(String username, UserRequestDto userRequestDto) {
+	public UserResponseDto updateUserByUsername(String username, UserRequestDto userRequestDto) {
 		User userToUpdate = findUser(username);
 		User updates = userMapper.userRequestDtoToEntity(userRequestDto);
 
