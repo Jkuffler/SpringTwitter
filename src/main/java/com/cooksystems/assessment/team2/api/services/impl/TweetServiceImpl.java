@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
+import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.entities.Credentials;
 import com.cooksystems.assessment.team2.api.entities.Tweet;
 import com.cooksystems.assessment.team2.api.entities.User;
 import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
+import com.cooksystems.assessment.team2.api.mappers.UserMapper;
 import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
 import com.cooksystems.assessment.team2.api.services.TweetService;
@@ -28,6 +30,7 @@ public class TweetServiceImpl implements TweetService {
 	private final TweetRepository tweetRepository;
 	private final TweetMapper tweetMapper;
 	private final UserRepository userRepository;
+	private final UserMapper userMapper;
 
 	private Tweet findTweet(Long id) {
 		Optional<Tweet> optionalTweet = tweetRepository.findByIdAndDeletedFalse(id);
@@ -89,5 +92,29 @@ public class TweetServiceImpl implements TweetService {
 		tweetToDelete.setDeleted(true);
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(tweetToDelete));
 	}
+	
+	@Override
+	public List<UserResponseDto> getTweetLikesById(Long id) {
+		Tweet tweetToFind = findTweet(id);
+		List<User> likedBy = tweetToFind.getLikedByUsers();
+
+		return userMapper.entitiesToResponseDtos(likedBy);
+	}
+	
+	@Override
+	public void likedTweet(Long id, Credentials credentials) {
+		Tweet tweetToLike = findTweet(id);
+		checkCredentials(credentials);
+
+		List<User> tweetLikes = tweetToLike.getLikedByUsers();
+		User userToAdd = findUser(credentials.getUserName());
+		
+		if(!tweetLikes.contains(userToAdd)) {
+			tweetLikes.add(userToAdd);
+		}
+		
+		tweetRepository.saveAndFlush(tweetToLike);
+	}
+	
 
 }
