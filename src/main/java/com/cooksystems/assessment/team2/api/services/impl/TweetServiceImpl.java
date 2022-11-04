@@ -13,6 +13,7 @@ import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.entities.Credentials;
 import com.cooksystems.assessment.team2.api.entities.Tweet;
 import com.cooksystems.assessment.team2.api.entities.User;
+import com.cooksystems.assessment.team2.api.exceptions.BadRequestException;
 import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
@@ -58,6 +59,15 @@ public class TweetServiceImpl implements TweetService {
 		if (!user.getCredentials().equals(credentials)) {
 			throw new NotAuthorizedException("Invalid credentials: " + credentials);
 		}
+	}
+	
+	private void checkTweetRequest(TweetRequestDto tweetRequestDto) {
+
+		if (tweetRequestDto.getCredentials() == null || tweetRequestDto.getCredentials().getUserName() == null
+				|| tweetRequestDto.getCredentials().getPassword() == null || tweetRequestDto.getContent() == null) {
+			throw new BadRequestException("Something you entered is null, try again.");
+		}
+
 	}
 
 	@Override
@@ -139,6 +149,30 @@ public class TweetServiceImpl implements TweetService {
 		return tweetMapper.entitiesToResponseDtos(repostsToTweet);
 	}
 	
+	@Override
+	public TweetResponseDto tweetReply(Long id, TweetRequestDto tweetRequestDto) {
+		Tweet tweetToReplyTo = findTweet(id);
+
+		checkTweetRequest(tweetRequestDto);
+		
+		User user = findUser(tweetRequestDto.getCredentials().getUserName());
+		Tweet replyTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
+		List<Tweet> tweetReplies = tweetToReplyTo.getReplies();
+		
+		replyTweet.setAuthor(user);
+		replyTweet.setInReplyTo(tweetToReplyTo);
+		tweetReplies.add(replyTweet);
+
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(replyTweet));
+
+	}
+	
+	public List<TweetResponseDto> getTweetReplies(Long id) {
+		Tweet tweetToFind = findTweet(id);
+		List<Tweet> repliesToTweet = tweetToFind.getReplies();
+		
+		return tweetMapper.entitiesToResponseDtos(repliesToTweet);
+	}
 	
 	
 	

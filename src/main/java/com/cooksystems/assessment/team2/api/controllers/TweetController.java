@@ -67,6 +67,18 @@ public class TweetController {
 	public List<TweetResponseDto> getReposts(@PathVariable Long id) {
 		return tweetService.getReposts(id);
 	}
+	
+	@PostMapping("/{id}/reply")
+	public TweetResponseDto tweetReply(@PathVariable Long id, @RequestBody TweetRequestDto tweetRequestDto) {
+		return tweetService.tweetReply(id, tweetRequestDto);
+	}
+	
+	@GetMapping("/{id}/replies")
+	public List<TweetResponseDto> getTweetReplies(@PathVariable Long id) {
+		return tweetService.getTweetReplies(id);
+	}
+	
+	
 
 
 }
