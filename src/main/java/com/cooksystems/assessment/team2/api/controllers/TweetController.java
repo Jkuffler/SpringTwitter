@@ -3,6 +3,7 @@ package com.cooksystems.assessment.team2.api.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
+import com.cooksystems.assessment.team2.api.entities.Credentials;
 import com.cooksystems.assessment.team2.api.services.TweetService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,11 @@ public class TweetController {
 	@PostMapping
 	public TweetResponseDto newTweet(@RequestBody TweetRequestDto tweetRequestDto) {
 		return tweetService.newTweet(tweetRequestDto);
+	}
+	
+	@DeleteMapping("/{id}")
+	public TweetResponseDto deleteTweet(@PathVariable Long id, @RequestBody Credentials credentials ) {
+		return tweetService.deleteTweet(id, credentials);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
+import com.cooksystems.assessment.team2.api.entities.Credentials;
 
 public interface TweetService {
 
@@ -12,5 +13,7 @@ public interface TweetService {
 	TweetResponseDto getTweetById(Long id);
 
 	List<TweetResponseDto> getAllTweets();
+
+	TweetResponseDto deleteTweet(Long id, Credentials credentials);
 
 }

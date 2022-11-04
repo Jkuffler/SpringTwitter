@@ -33,8 +33,6 @@ public class UserServiceImpl implements UserService {
 	private final UserMapper userMapper;
 	
 	private final TweetMapper tweetMapper;
-	
-	private final TweetRepository tweetRepository;
 
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
@@ -122,12 +120,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserResponseDto getTweetsbyAuthor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<TweetResponseDto> getTweetsbyAuthor(String userName) {
 		User user = findUser(userName);
 		List<Tweet> listOfTweets = user.getTweets();
@@ -136,7 +128,5 @@ public class UserServiceImpl implements UserService {
 		
 		return tweetMapper.entitiesToDto(listOfTweets);
 	}
-
-	
 
 }

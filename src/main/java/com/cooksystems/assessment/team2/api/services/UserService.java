@@ -20,8 +20,6 @@ public interface UserService {
 
 	UserResponseDto getUserByUserName(String userName);
 
-	UserResponseDto getTweetsbyAuthor();
-
 	List<TweetResponseDto> getTweetsbyAuthor(String userName);
 
 }
