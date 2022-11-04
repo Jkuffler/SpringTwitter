@@ -115,6 +115,31 @@ public class TweetServiceImpl implements TweetService {
 		
 		tweetRepository.saveAndFlush(tweetToLike);
 	}
+
+	@Override
+	public TweetResponseDto repostTweet(Long id, Credentials credentials) {
+		Tweet tweetToRepost = findTweet(id);
+		TweetRequestDto tweetRequest = tweetMapper.entityToRequestDto(tweetToRepost);
+		checkCredentials(credentials);
+		Tweet repostedTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequest);
+
+		User user = findUser(credentials.getUserName());
+		repostedTweet.setAuthor(user);
+		repostedTweet.setContent(tweetToRepost.getContent());
+		repostedTweet.setRepostOf(tweetToRepost);
+
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(repostedTweet));
+	}
+	
+	@Override
+	public List<TweetResponseDto> getReposts(Long id) {
+		Tweet tweetToFind = findTweet(id); 
+		List<Tweet> repostsToTweet = tweetToFind.getReposts();
+		
+		return tweetMapper.entitiesToResponseDtos(repostsToTweet);
+	}
+	
+	
 	
 
 }
