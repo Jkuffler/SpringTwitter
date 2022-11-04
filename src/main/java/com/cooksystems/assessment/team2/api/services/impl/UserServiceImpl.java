@@ -22,18 +22,18 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-	
+
 	private final UserRepository userRepository;
 
 	private final UserMapper userMapper;
-	
+
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
-		
+
 		if (optionalUser.isEmpty()) {
 			throw new NotFoundException("No user is under the username: " + username);
 		}
-		
+
 		return optionalUser.get();
 	}
 
@@ -44,31 +44,32 @@ public class UserServiceImpl implements UserService {
 			throw new NotAuthorizedException("Invalid credentials: " + userRequestDto);
 		}
 	}
-	
+
 	private void checkCredentials(Credentials credentials) {
 		User user = findUser(credentials.getUserName());
-		
+
 		if (!user.getCredentials().equals(credentials)) {
 			throw new NotAuthorizedException("Invalid credentials: " + credentials);
 		}
 	}
+
 	@Override
 	public List<UserResponseDto> getAllUsers() {
-		
+
 		return userMapper.entitiesToResponseDtos(userRepository.findAllByDeletedFalse());
 	}
-	
+
 	@Override
 	public UserResponseDto createUser(UserRequestDto userRequestDto) {
-		
+
 		User savedUser = userMapper.userRequestDtoToEntity(userRequestDto);
 		return userMapper.entityToDto(userRepository.saveAndFlush(savedUser));
 	}
-	
+
 	@Override
 	public UserResponseDto deleteUser(String username, Credentials credentials) {
 		User userToDelete = findUser(username);
-		
+
 		checkCredentials(credentials);
 
 		userToDelete.setDeleted(true);
@@ -83,11 +84,11 @@ public class UserServiceImpl implements UserService {
 		if (updates.getProfile() == null || updates.getCredentials() == null) {
 			throw new BadRequestException("Error! Please fill all the required fields.");
 		}
-		
+
 		checkCredentialsDto(username, userRequestDto);
-		
+
 		Profile profile = userToUpdate.getProfile();
-		
+
 		if (updates.getProfile().getEmail() != null) {
 			profile.setEmail(updates.getProfile().getEmail());
 		}
@@ -100,9 +101,15 @@ public class UserServiceImpl implements UserService {
 		if (updates.getProfile().getPhone() != null) {
 			profile.setPhone(updates.getProfile().getPhone());
 		}
-		
+
 		userToUpdate.setProfile(profile);
 		return userMapper.entityToDto(userRepository.saveAndFlush(userToUpdate));
+	}
+
+	@Override
+	public UserResponseDto getUserByUserName(String userName) {
+
+		return userMapper.entityToDto(findUser(userName));
 	}
 
 }
