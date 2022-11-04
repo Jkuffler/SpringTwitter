@@ -1,5 +1,8 @@
 package com.cooksystems.assessment.team2.api.services.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -19,31 +22,31 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TweetServiceImpl implements TweetService {
-	
+
 	private final TweetRepository tweetRepository;
 	private final TweetMapper tweetMapper;
 	private final UserRepository userRepository;
-	
+
 	private Tweet findTweet(Long id) {
 		Optional<Tweet> optionalTweet = tweetRepository.findByIdAndDeletedFalse(id);
-		
+
 		if (optionalTweet.isEmpty()) {
 			throw new NotFoundException("No tweet is under the id: " + id);
 		}
-		
+
 		return optionalTweet.get();
 	}
 
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
-		
+
 		if (optionalUser.isEmpty()) {
 			throw new NotFoundException("No user is under the username: " + username);
 		}
-		
+
 		return optionalUser.get();
 	}
-	
+
 	@Override
 	public TweetResponseDto newTweet(TweetRequestDto tweetRequestDto) {
 		Tweet tweetToCreate = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
@@ -53,10 +56,18 @@ public class TweetServiceImpl implements TweetService {
 
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(tweetToCreate));
 	}
-	
+
 	@Override
 	public TweetResponseDto getTweetById(Long id) {
 		return tweetMapper.entityToDto(findTweet(id));
+	}
+
+	@Override
+	public List<TweetResponseDto> getAllTweets() {
+		List<Tweet> listOfTweets = tweetRepository.findAllByDeletedFalse();
+		Collections.sort(listOfTweets);
+		Collections.reverse(listOfTweets);
+		return tweetMapper.entitiesToResponseDtos(listOfTweets);
 	}
 
 }

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name = "tweet")
-public class Tweet {
+public class Tweet implements Comparable<Tweet> {
 	
 	@Id
 	@GeneratedValue
@@ -63,6 +63,14 @@ public class Tweet {
 	@JoinTable(name = "user_mentions", joinColumns = @JoinColumn (name = "tweet_id"), 
 	inverseJoinColumns = @JoinColumn(name = "user_id") )
 	private List<User> mentionedUsers;
+
+	@Override
+	public int compareTo(Tweet t) {
+		if (getPosted() == null || t.getPosted() == null) {
+			return 0;
+		}
+		return getPosted().compareTo(t.getPosted());
+	}
 	
 	
 	

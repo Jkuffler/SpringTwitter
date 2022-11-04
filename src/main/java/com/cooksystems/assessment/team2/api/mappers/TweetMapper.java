@@ -1,5 +1,7 @@
 package com.cooksystems.assessment.team2.api.mappers;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
@@ -14,4 +16,8 @@ public interface TweetMapper {
 	TweetRequestDto entityToRequestDto(Tweet entity);
 	
 	Tweet tweetRequestDtoToEntity(TweetRequestDto tweetRequesetDto);
+
+	List<TweetResponseDto> entitiesToDto(List<Tweet> listOfTweets);
+
+	List<TweetResponseDto> entitiesToResponseDtos(List<Tweet> findAllByDeletedFalse);
 }
