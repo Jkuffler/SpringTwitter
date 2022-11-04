@@ -18,7 +18,6 @@ import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
 import com.cooksystems.assessment.team2.api.mappers.UserMapper;
-import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
 import com.cooksystems.assessment.team2.api.services.UserService;
 
@@ -31,8 +30,10 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	private final UserMapper userMapper;
-	
+
 	private final TweetMapper tweetMapper;
+
+	private List<TweetResponseDto> feed;
 
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
@@ -120,13 +121,37 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<TweetResponseDto> getTweetsbyAuthor(String userName) {
-		User user = findUser(userName);
+	public List<TweetResponseDto> getTweetsbyAuthor(String username) {
+		User user = findUser(username);
 		List<Tweet> listOfTweets = user.getTweets();
 		Collections.sort(listOfTweets);
 		Collections.reverse(listOfTweets);
-		
+
 		return tweetMapper.entitiesToDto(listOfTweets);
+	}
+
+	@Override
+	public List<TweetResponseDto> getFeedByAuthor(String username) {
+		User user = findUser(username);
+		List<Tweet> listOfTweets = user.getTweets();
+		for (User user1 : user.getFollowing()) {
+			listOfTweets.addAll(user1.getTweets());
+		}
+		Collections.sort(listOfTweets);
+		Collections.reverse(listOfTweets);
+
+		return tweetMapper.entitiesToResponseDtos(listOfTweets);
+	}
+
+	/*
+	 * Try to also implement filter that does not include deleted followers
+	 */
+
+	@Override
+	public List<UserResponseDto> getFollowing(String username) {
+		User user = findUser(username);
+
+		return userMapper.entitiesToResponseDtos(user.getFollowing());
 	}
 
 }

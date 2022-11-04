@@ -13,8 +13,7 @@ import com.cooksystems.assessment.team2.api.entities.User;
 public interface UserMapper {
 
 	List<UserResponseDto> entitiesToResponseDtos(List<User> findAll);
-	
-	
+
 	User userRequestDtoToEntity(UserRequestDto userRequestDto);
 
 	@Mapping(source = "credentials.userName", target = "userName")
