@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
+import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.entities.Credentials;
 import com.cooksystems.assessment.team2.api.services.TweetService;
 
@@ -45,6 +46,16 @@ public class TweetController {
 	@DeleteMapping("/{id}")
 	public TweetResponseDto deleteTweet(@PathVariable Long id, @RequestBody Credentials credentials ) {
 		return tweetService.deleteTweet(id, credentials);
+	}
+	
+	@GetMapping("/{id}/likes")
+	public List<UserResponseDto> getTweetLikesById(@PathVariable Long id){
+		return tweetService.getTweetLikesById(id);
+	}
+	
+	@PostMapping("/{id}/like")
+	public void likedTweet(@PathVariable Long id, @RequestBody Credentials credentials) {
+		tweetService.likedTweet(id, credentials);
 	}
 
 }
