@@ -34,15 +34,21 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 
-	@GetMapping("/@{userName}")
-	public UserResponseDto getUserByUserName(@PathVariable String userName) {
-		return userService.getUserByUserName(userName);
+	@GetMapping("/@{username}")
+	public UserResponseDto getUserByUserName(@PathVariable String username) {
+		return userService.getUserByUserName(username);
 	}
 
-	@GetMapping("/@{userName}/tweets")
-	public List<TweetResponseDto> getTweetsByAuthor(@PathVariable String userName) {
-		return userService.getTweetsbyAuthor(userName);
+	@GetMapping("/@{username}/tweets")
+	public List<TweetResponseDto> getTweetsByAuthor(@PathVariable String username) {
+		return userService.getTweetsbyAuthor(username);
 
+	}
+	
+	@GetMapping("/@{username}/feed")
+	public List<TweetResponseDto> getFeedByAuthor (@PathVariable String userName) {
+		return null;
+		
 	}
 
 	@PostMapping
