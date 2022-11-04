@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
+import com.cooksystems.assessment.team2.api.entities.Credentials;
 import com.cooksystems.assessment.team2.api.entities.Tweet;
 import com.cooksystems.assessment.team2.api.entities.User;
+import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
 import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
@@ -46,6 +48,14 @@ public class TweetServiceImpl implements TweetService {
 
 		return optionalUser.get();
 	}
+	
+	private void checkCredentials(Credentials credentials) {
+		User user = findUser(credentials.getUserName());
+
+		if (!user.getCredentials().equals(credentials)) {
+			throw new NotAuthorizedException("Invalid credentials: " + credentials);
+		}
+	}
 
 	@Override
 	public TweetResponseDto newTweet(TweetRequestDto tweetRequestDto) {
@@ -68,6 +78,16 @@ public class TweetServiceImpl implements TweetService {
 		Collections.sort(listOfTweets);
 		Collections.reverse(listOfTweets);
 		return tweetMapper.entitiesToResponseDtos(listOfTweets);
+	}
+
+	@Override
+	public TweetResponseDto deleteTweet(Long id, Credentials credentials) {
+		Tweet tweetToDelete = findTweet(id);
+		
+		checkCredentials(credentials);
+
+		tweetToDelete.setDeleted(true);
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(tweetToDelete));
 	}
 
 }
