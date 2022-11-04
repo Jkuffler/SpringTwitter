@@ -1,5 +1,7 @@
 package com.cooksystems.assessment.team2.api.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +24,20 @@ public class TweetController {
 	@Autowired
 	final private TweetService tweetService;
 	
+	@GetMapping
+	public List<TweetResponseDto> getAllTweets(){
+		return tweetService.getAllTweets();
+		
+	}
+	
+	@GetMapping("/{id}")
+	public TweetResponseDto getTweetById(@PathVariable Long id) {
+		return tweetService.getTweetById(id);
+	}
 
 	@PostMapping
 	public TweetResponseDto newTweet(@RequestBody TweetRequestDto tweetRequestDto) {
 		return tweetService.newTweet(tweetRequestDto);
 	}
 
-	@GetMapping("/{id}")
-	public TweetResponseDto getTweetById(@PathVariable Long id) {
-		return tweetService.getTweetById(id);
-	}
 }

@@ -1,19 +1,24 @@
 package com.cooksystems.assessment.team2.api.services.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.dtos.UserRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.entities.Credentials;
 import com.cooksystems.assessment.team2.api.entities.Profile;
+import com.cooksystems.assessment.team2.api.entities.Tweet;
 import com.cooksystems.assessment.team2.api.entities.User;
 import com.cooksystems.assessment.team2.api.exceptions.BadRequestException;
 import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
+import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
 import com.cooksystems.assessment.team2.api.mappers.UserMapper;
+import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
 import com.cooksystems.assessment.team2.api.services.UserService;
 
@@ -26,6 +31,10 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	private final UserMapper userMapper;
+	
+	private final TweetMapper tweetMapper;
+	
+	private final TweetRepository tweetRepository;
 
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
@@ -111,5 +120,23 @@ public class UserServiceImpl implements UserService {
 
 		return userMapper.entityToDto(findUser(userName));
 	}
+
+	@Override
+	public UserResponseDto getTweetsbyAuthor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TweetResponseDto> getTweetsbyAuthor(String userName) {
+		User user = findUser(userName);
+		List<Tweet> listOfTweets = user.getTweets();
+		Collections.sort(listOfTweets);
+		Collections.reverse(listOfTweets);
+		
+		return tweetMapper.entitiesToDto(listOfTweets);
+	}
+
+	
 
 }
