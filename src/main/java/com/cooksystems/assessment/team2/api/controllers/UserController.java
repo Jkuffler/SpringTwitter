@@ -36,10 +36,9 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 
-	
 	/*
-	 * Retrieves a user with the given username. 
-	 * If no such user exists or is deleted, an error should be sent in lieu of a response.
+	 * Retrieves a user with the given username. If no such user exists or is
+	 * deleted, an error should be sent in lieu of a response.
 	 */
 	@GetMapping("/@{username}")
 	public UserResponseDto getUserByUserName(@PathVariable String username) {
@@ -47,50 +46,59 @@ public class UserController {
 	}
 
 	/*
-	 * Retrieves all (non-deleted) tweets authored by the user with the given username. 
-	 * This includes simple tweets, reposts, and replies. 
-	 * The tweets should appear in reverse-chronological order. 
-	 * If no active user with that username exists (deleted or never created), an error should be sent in lieu of a response.
+	 * Retrieves all (non-deleted) tweets authored by the user with the given
+	 * username. This includes simple tweets, reposts, and replies. The tweets
+	 * should appear in reverse-chronological order. If no active user with that
+	 * username exists (deleted or never created), an error should be sent in lieu
+	 * of a response.
 	 */
 	@GetMapping("/@{username}/tweets")
 	public List<TweetResponseDto> getTweetsByAuthor(@PathVariable String username) {
 		return userService.getTweetsbyAuthor(username);
 
 	}
-	
+
 	/*
-	 * Retrieves all (non-deleted) tweets authored by the user with the given username, as well as all (non-deleted) tweets authored by users the given user is following. 
-	 * This includes simple tweets, reposts, and replies. 
-	 * The tweets should appear in reverse-chronological order. 
-	 * If no active user with that username exists (deleted or never created), an error should be sent in lieu of a response.
+	 * Retrieves all (non-deleted) tweets authored by the user with the given
+	 * username, as well as all (non-deleted) tweets authored by users the given
+	 * user is following. This includes simple tweets, reposts, and replies. The
+	 * tweets should appear in reverse-chronological order. If no active user with
+	 * that username exists (deleted or never created), an error should be sent in
+	 * lieu of a response.
 	 */
 	@GetMapping("/@{username}/feed")
-	public List<TweetResponseDto> getFeedByAuthor (@PathVariable String username) {
+	public List<TweetResponseDto> getFeedByAuthor(@PathVariable String username) {
 		return userService.getFeedByAuthor(username);
-		
+
 	}
-	
+
 	@GetMapping("/@{username}/following")
 	public List<UserResponseDto> getFollowing(@PathVariable String username) {
 		return userService.getFollowing(username);
-		
+
 	}
-	
-	
+
+	@GetMapping("/@{username}/followers")
+	public List<UserResponseDto> getFollowers(@PathVariable String username) {
+		return userService.getFollowers(username);
+	}
+
 	/*
-	 * Creates a new user. 
-	 * If any required fields are missing or the username provided is already taken, an error should be sent in lieu of a response.
-	 * If the given credentials match a previously-deleted user, re-activate the deleted user instead of creating a new one.
+	 * Creates a new user. If any required fields are missing or the username
+	 * provided is already taken, an error should be sent in lieu of a response. If
+	 * the given credentials match a previously-deleted user, re-activate the
+	 * deleted user instead of creating a new one.
 	 */
 	@PostMapping
 	public UserResponseDto createUser(@RequestBody UserRequestDto userRequestDto) {
 		return userService.createUser(userRequestDto);
 	}
-	
+
 	/*
-	 * "Deletes" a user with the given username. 
-	 * If no such user exists or the provided credentials do not match the user, an error should be sent in lieu of a response. 
-	 * If a user is successfully "deleted", the response should contain the user data prior to deletion.
+	 * "Deletes" a user with the given username. If no such user exists or the
+	 * provided credentials do not match the user, an error should be sent in lieu
+	 * of a response. If a user is successfully "deleted", the response should
+	 * contain the user data prior to deletion.
 	 */
 	@DeleteMapping("/@{username}")
 	public UserResponseDto deleteUser(@PathVariable String username, @RequestBody Credentials credentials) {
@@ -98,40 +106,24 @@ public class UserController {
 	}
 
 	/*
-	 * Updates the profile of a user with the given username. 
-	 * If no such user exists, the user is deleted, or the provided credentials do not match the user, an error should be sent in lieu of a response. 
-	 * In the case of a successful update, the returned user should contain the updated data.
+	 * Updates the profile of a user with the given username. If no such user
+	 * exists, the user is deleted, or the provided credentials do not match the
+	 * user, an error should be sent in lieu of a response. In the case of a
+	 * successful update, the returned user should contain the updated data.
 	 */
 	@PatchMapping("/@{username}")
 	public UserResponseDto updateUser(@PathVariable String username, @RequestBody UserRequestDto userRequestDto) {
 		return userService.updateUser(username, userRequestDto);
 	}
-	
-	@GetMapping("/@{username}/followers")
-	public List<UserResponseDto> followers(@PathVariable String username) {
-		return userService.followers(username);
-	}
-	
-	
+
 	@PostMapping("/@{username}/follow")
 	public void follow(@PathVariable String username, @RequestBody Credentials credentials) {
 		userService.follow(username, credentials);
 	}
-	
+
 	@PostMapping("/@{username}/unfollow")
 	public void unfollow(@PathVariable String username, @RequestBody Credentials credentials) {
 		userService.unfollow(username, credentials);
 	}
-	
-
-	@GetMapping("/@{username}/following")
-	public List<UserResponseDto> following(@PathVariable String username) {
-		return userService.following(username);
-	}
-	
-	
-	
-	
-	
 
 }

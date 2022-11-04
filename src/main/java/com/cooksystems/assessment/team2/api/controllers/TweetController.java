@@ -51,8 +51,8 @@ public class TweetController {
 	 * If the given credentials do not match an active user in the database, an error should be sent in lieu of a response.
 	 */
 	@PostMapping
-	public TweetResponseDto newTweet(@RequestBody TweetRequestDto tweetRequestDto) {
-		return tweetService.newTweet(tweetRequestDto);
+	public TweetResponseDto postNewTweet(@RequestBody TweetRequestDto tweetRequestDto) {
+		return tweetService.postNewTweet(tweetRequestDto);
 	}
 	
 	/*
