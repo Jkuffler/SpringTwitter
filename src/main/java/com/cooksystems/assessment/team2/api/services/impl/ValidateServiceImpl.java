@@ -36,7 +36,14 @@ public class ValidateServiceImpl implements ValidateService {
 	
 	@Override
 	public boolean checkIfUserNameAvailable(String username) {
-		return false;
+		List<User> listOfUsers = userRepository.findAll();
+		for (User user : listOfUsers) {
+			if (user.getCredentials().getUserName().equals(username)) {
+				System.out.println("Username " + username + " is not available.");
+				return false;
+			}
+		}
+		return true;
 	}
 
 	

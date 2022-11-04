@@ -21,24 +21,14 @@ public interface UserService {
 
 	List<TweetResponseDto> getTweetsbyAuthor(String userName);
 
-
 	void follow(String username, Credentials credentials);
 
 	void unfollow(String username, Credentials credentials);
 
-	List<UserResponseDto> followers(String username);
-
-	List<UserResponseDto> following(String username);
-
-	List<TweetResponseDto> getFeedByAuthor();
+	List<UserResponseDto> getFollowers(String username);
 
 	List<TweetResponseDto> getFeedByAuthor(String username);
 
 	List<UserResponseDto> getFollowing(String username);
-
-	List<TweetResponseDto> getFeedByAuthor(String username);
-
-	List<UserResponseDto> getFollowing(String username);
-
 
 }
