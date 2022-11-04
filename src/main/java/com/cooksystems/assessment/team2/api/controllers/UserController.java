@@ -65,14 +65,14 @@ public class UserController {
 	 * If no active user with that username exists (deleted or never created), an error should be sent in lieu of a response.
 	 */
 	@GetMapping("/@{username}/feed")
-	public List<TweetResponseDto> getFeedByAuthor (@PathVariable String userName) {
-		return userService.getFeedByAuthor();
+	public List<TweetResponseDto> getFeedByAuthor (@PathVariable String username) {
+		return userService.getFeedByAuthor(username);
 		
 	}
 	
 	@GetMapping("/@{username}/following")
-	public UserResponseDto getFollowing(@PathVariable String username, @RequestBody UserRequestDto userRequestDto) {
-		return userService.getFollowing(username, userRequestDto);
+	public List<UserResponseDto> getFollowing(@PathVariable String username) {
+		return userService.getFollowing(username);
 		
 	}
 	

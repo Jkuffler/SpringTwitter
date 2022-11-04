@@ -21,6 +21,7 @@ public interface UserService {
 
 	List<TweetResponseDto> getTweetsbyAuthor(String userName);
 
+<<<<<<< HEAD
 	void follow(String username, Credentials credentials);
 
 	void unfollow(String username, Credentials credentials);
@@ -31,5 +32,10 @@ public interface UserService {
 
 	List<TweetResponseDto> getFeedByAuthor();
 
+=======
+	List<TweetResponseDto> getFeedByAuthor(String username);
+
+	List<UserResponseDto> getFollowing(String username);
+>>>>>>> 9f50f79 (Implemented two Validate endpoints.)
 
 }
