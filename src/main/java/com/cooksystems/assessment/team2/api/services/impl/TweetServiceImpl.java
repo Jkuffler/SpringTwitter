@@ -72,7 +72,7 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	@Override
-	public TweetResponseDto newTweet(TweetRequestDto tweetRequestDto) {
+	public TweetResponseDto postNewTweet(TweetRequestDto tweetRequestDto) {
 		Tweet tweetToCreate = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
 		User findAuthor = findUser(tweetRequestDto.getCredentials().getUserName());
 		tweetToCreate.setAuthor(findAuthor);

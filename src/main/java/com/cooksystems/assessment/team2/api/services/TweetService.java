@@ -10,7 +10,7 @@ import com.cooksystems.assessment.team2.api.entities.Credentials;
 
 public interface TweetService {
 
-	TweetResponseDto newTweet(TweetRequestDto tweetRequestDto);
+	TweetResponseDto postNewTweet(TweetRequestDto tweetRequestDto);
 
 	TweetResponseDto getTweetById(Long id);
 
