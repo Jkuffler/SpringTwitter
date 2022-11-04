@@ -32,6 +32,12 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 	
+	@GetMapping("/@{userName}")
+	public UserResponseDto getUserByUserName (@PathVariable String userName) {
+		return userService.getUserByUserName(userName);
+	}
+	
+	
 	@PostMapping
 	public UserResponseDto createUser (@RequestBody UserRequestDto userRequestDto) {
 		return userService.createUser(userRequestDto);
