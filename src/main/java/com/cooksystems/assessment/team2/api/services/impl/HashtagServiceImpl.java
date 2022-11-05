@@ -47,11 +47,6 @@ public class HashtagServiceImpl implements HashtagService {
 		}
 		return tweetMapper.entitiesToResponseDtos(optionalHashtag.get().getTweets());
 	};
-  
-	@Override
-	public List<HashtagDto> getAllHashtags() {
-		return hashtagMapper.entitiesToResponseDtos(hashtagRepository.findAll());
-
-	}
+ 
 
 }
