@@ -35,8 +35,6 @@ public interface TweetService {
 
 	ContextDto getTweetContext(Long id);
 
-	List<HashtagDto> getTagsById(Long id);
-	
-	
+	List<HashtagDto> getHashtagsByTweetId(Long id);
 
 }
