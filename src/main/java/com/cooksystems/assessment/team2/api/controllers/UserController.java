@@ -125,5 +125,10 @@ public class UserController {
 	public void unfollow(@PathVariable String username, @RequestBody Credentials credentials) {
 		userService.unfollow(username, credentials);
 	}
+	
+	@GetMapping("/@{username}/mentions")
+	public List<TweetResponseDto> getUserMentions(@PathVariable String username) {
+		return userService.getUserMentions(username);
+	}
 
 }
