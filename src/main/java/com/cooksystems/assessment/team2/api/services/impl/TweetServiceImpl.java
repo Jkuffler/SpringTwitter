@@ -49,7 +49,7 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	private User findUser(String username) {
-		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
+		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
 
 		if (optionalUser.isEmpty()) {
 			throw new NotFoundException("No user is under the username: " + username);
@@ -59,7 +59,7 @@ public class TweetServiceImpl implements TweetService {
 	}
 	
 	private void checkCredentials(Credentials credentials) {
-		User user = findUser(credentials.getUserName());
+		User user = findUser(credentials.getUsername());
 
 		if (!user.getCredentials().equals(credentials)) {
 			throw new NotAuthorizedException("Invalid credentials: " + credentials);
@@ -68,7 +68,7 @@ public class TweetServiceImpl implements TweetService {
 	
 	private void checkTweetRequest(TweetRequestDto tweetRequestDto) {
 
-		if (tweetRequestDto.getCredentials() == null || tweetRequestDto.getCredentials().getUserName() == null
+		if (tweetRequestDto.getCredentials() == null || tweetRequestDto.getCredentials().getUsername() == null
 				|| tweetRequestDto.getCredentials().getPassword() == null || tweetRequestDto.getContent() == null) {
 			throw new BadRequestException("Something you entered is null, try again.");
 		}
@@ -78,7 +78,7 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public TweetResponseDto postNewTweet(TweetRequestDto tweetRequestDto) {
 		Tweet tweetToCreate = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
-		User findAuthor = findUser(tweetRequestDto.getCredentials().getUserName());
+		User findAuthor = findUser(tweetRequestDto.getCredentials().getUsername());
 		tweetToCreate.setAuthor(findAuthor);
 		tweetToCreate.setContent(tweetRequestDto.getContent());
 
@@ -122,7 +122,7 @@ public class TweetServiceImpl implements TweetService {
 		checkCredentials(credentials);
 
 		List<User> tweetLikes = tweetToLike.getLikedByUsers();
-		User userToAdd = findUser(credentials.getUserName());
+		User userToAdd = findUser(credentials.getUsername());
 		
 		if(!tweetLikes.contains(userToAdd)) {
 			tweetLikes.add(userToAdd);
@@ -138,7 +138,7 @@ public class TweetServiceImpl implements TweetService {
 		checkCredentials(credentials);
 		Tweet repostedTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequest);
 
-		User user = findUser(credentials.getUserName());
+		User user = findUser(credentials.getUsername());
 		repostedTweet.setAuthor(user);
 		repostedTweet.setContent(tweetToRepost.getContent());
 		repostedTweet.setRepostOf(tweetToRepost);
@@ -160,7 +160,7 @@ public class TweetServiceImpl implements TweetService {
 
 		checkTweetRequest(tweetRequestDto);
 		
-		User user = findUser(tweetRequestDto.getCredentials().getUserName());
+		User user = findUser(tweetRequestDto.getCredentials().getUsername());
 		Tweet replyTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
 		List<Tweet> tweetReplies = tweetToReplyTo.getReplies();
 		

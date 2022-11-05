@@ -1,6 +1,7 @@
 package com.cooksystems.assessment.team2.api.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,6 @@ public class ValidateServiceImpl implements ValidateService {
 			if (hashtag.getLabel().equals("#" + label)) {
 				return true;
 			}
-
 		}
 		return false;
 	}
@@ -36,24 +36,21 @@ public class ValidateServiceImpl implements ValidateService {
 	
 	@Override
 	public boolean checkIfUserNameAvailable(String username) {
-		List<User> listOfUsers = userRepository.findAll();
-		for (User user : listOfUsers) {
-			if (user.getCredentials().getUserName().equals(username)) {
-				System.out.println("Username " + username + " is not available.");
-				return false;
-			}
-		}
+		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+		if (optionalUser.isEmpty()) {
+			System.out.println("Username " + username + " is not available.");
+			return false;
+		} 
 		return true;
+		
 	}
 
 	
 	@Override
 	public boolean checkIfUserNameExists(String username) {
-		List<User> listOfUsers = userRepository.findAll();
-		for (User user : listOfUsers) {
-			if (user.getCredentials().getUserName().equals(username)) {
-				return true;
-			}
+		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+		if (optionalUser.isEmpty() || optionalUser.get().isDeleted()) {
+			return true;
 		}
 		return false;
 	}

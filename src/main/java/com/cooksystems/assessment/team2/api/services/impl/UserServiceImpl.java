@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	private final ValidateService validateService;
 
 	private User findUser(String username) {
-		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
+		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
 
 		if (optionalUser.isEmpty()) {
 			throw new NotFoundException("No user is under the username: " + username);
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void checkCredentials(Credentials credentials) {
-		User user = findUser(credentials.getUserName());
+		User user = findUser(credentials.getUsername());
 
 		if (!user.getCredentials().equals(credentials)) {
 			throw new NotAuthorizedException("Invalid credentials: " + credentials);
@@ -64,32 +64,30 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserResponseDto> getAllUsers() {
-
 		return userMapper.entitiesToResponseDtos(userRepository.findAllByDeletedFalse());
 	}
 
 	@Override
 	public UserResponseDto createUser(UserRequestDto userRequestDto) {
 
-		User savedUser = userMapper.userRequestDtoToEntity(userRequestDto);
-
-		if (savedUser.getProfile() == null || savedUser.getCredentials() == null
-				|| savedUser.getCredentials().getUserName() == null
-				|| savedUser.getCredentials().getPassword() == null || savedUser.getProfile().getEmail() == null) {
+		if (userRequestDto.getCredentials() == null || userRequestDto.getCredentials().getUsername() == null
+				|| userRequestDto.getCredentials().getPassword() == null || userRequestDto.getProfile().getEmail() == null) {
 			throw new BadRequestException(
 					"All fields must contain a value.");
 		}
 		
-		boolean userExist = validateService.checkIfUserNameExists(savedUser.getCredentials().getUserName());
-		boolean userAvailable = validateService.checkIfUserNameAvailable(savedUser.getCredentials().getUserName());
-		
-		if (!userAvailable) {
-			throw new BadRequestException("User already exists");
-		} else if (userExist) {
-			User recreateUser = userRepository.findByCredentialsUserNameAndDeletedFalse(savedUser.getCredentials().getUserName()).get();
-			recreateUser.setDeleted(false);
-			return userMapper.entityToDto(userRepository.saveAndFlush(recreateUser));
-		}
+		User savedUser = userMapper.userRequestDtoToEntity(userRequestDto);
+//		
+//		boolean userExist = validateService.checkIfUserNameExists(userRequestDto.getCredentials().getUsername());
+//		boolean userAvailable = validateService.checkIfUserNameAvailable(userRequestDto.getCredentials().getUsername());
+//	
+//		if (!userAvailable) {
+//			throw new BadRequestException("User already exists");
+//		} else if (userExist) {
+//			User recreateUser = userRepository.findByCredentialsUserNameAndDeletedFalse(savedUser.getCredentials().getUsername()).get();
+//			recreateUser.setDeleted(false);
+//			return userMapper.entityToDto(userRepository.saveAndFlush(recreateUser));
+//		}
 		return userMapper.entityToDto(userRepository.saveAndFlush(savedUser));
 	}
 
@@ -135,8 +133,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDto getUserByUserName(String userName) {
-
-		return userMapper.entityToDto(findUser(userName));
+		User getUser = findUser(userName);
+		return userMapper.entityToDto(getUser);
 	}
 
 	@Override
@@ -166,7 +164,7 @@ public class UserServiceImpl implements UserService {
 	public void follow(String username, Credentials credentials) {
 		checkCredentials(credentials);
 		User userToFollow = findUser(username);
-		User follower = findUser(credentials.getUserName());
+		User follower = findUser(credentials.getUsername());
 
 		List<User> following = follower.getFollowing();
 
@@ -186,7 +184,7 @@ public class UserServiceImpl implements UserService {
 	public void unfollow(String username, Credentials credentials) {
 		checkCredentials(credentials);
 		User userToUnfollow = findUser(username);
-		User unfollower = findUser(credentials.getUserName());
+		User unfollower = findUser(credentials.getUsername());
 
 		List<User> following = unfollower.getFollowing();
 

@@ -18,7 +18,7 @@ public interface UserMapper {
 	@Autowired
 	User userRequestDtoToEntity(UserRequestDto userRequestDto);
 
-	@Mapping(source = "credentials.userName", target = "userName")
+	@Mapping(source = "credentials.username", target = "username")
 	UserResponseDto entityToDto(User user);
 
 }
