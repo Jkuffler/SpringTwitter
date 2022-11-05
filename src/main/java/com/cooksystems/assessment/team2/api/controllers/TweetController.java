@@ -83,14 +83,6 @@ public class TweetController {
 	public TweetResponseDto deleteTweet(@PathVariable Long id, @RequestBody Credentials credentials ) {
 		return tweetService.deleteTweet(id, credentials);
 	}
-	
-
-	@GetMapping("/{id}/likes")
-	@ResponseStatus(HttpStatus.OK)
-	public List<UserResponseDto> getTweetLikesById(@PathVariable Long id){
-		return tweetService.getTweetLikesById(id);
-	}
-	
 
 	/*
 	 * Creates a "like" relationship between the tweet with the given id and the user whose credentials are provided by the request body. 
@@ -175,16 +167,12 @@ public class TweetController {
 	}
 	
 	@GetMapping("/{id}/tags")
-
-	@ResponseStatus(HttpStatus.OK)
-	public List<HashtagDto> getTagsById(@PathVariable Long id) {
-		return tweetService.getTagsById(id);
-
 	public List<HashtagDto> getHashtagsByTweetId(@PathVariable Long id) {
 		return tweetService.getHashtagsByTweetId(id);
 
 	}
 	
+
 	
 
 
