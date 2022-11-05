@@ -13,9 +13,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/validate")
 public class ValidateController {
-<<<<<<< HEAD
-	
-=======
 
 	private final ValidateService validateService;
 
@@ -46,5 +43,4 @@ public class ValidateController {
 
 	}
 
->>>>>>> 12c803c75d65c733b21646216d37f0a06b81b3ef
 }
