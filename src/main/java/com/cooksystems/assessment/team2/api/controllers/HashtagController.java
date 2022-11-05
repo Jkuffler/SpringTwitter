@@ -28,7 +28,7 @@ public class HashtagController {
 
 	@Autowired
 	private final HashtagService hashtagService;
-
+	
 	@GetMapping
 	public List<HashtagDto> getAllHashtags() {
 		return hashtagService.getAllHashtags();
@@ -38,29 +38,6 @@ public class HashtagController {
 	public List<TweetResponseDto> getgetAllHashtagsByLabel(@PathVariable String label) {
 		return hashtagService.getAllTweetsByHashtag(label);
 	}
-
-	
-	@Autowired
-	private HashtagService hashtagService;
-	
-	private TweetService tweetService;
-	
-	@GetMapping
-	public List<HashtagDto> getAllHashtags() {
-		return hashtagService.getAllHashtags();
-	}
-	
-	/*
-	 * Retrieves all (non-deleted) tweets tagged with the given hashtag label. The tweets should appear in reverse-chronological order. 
-	 * If no hashtag with the given label exists, an error should be sent in lieu of a response.
-	 * 
-	 */
-//	@GetMapping("/{label}")
-//	public List<HashtagDto> getAllTweetsByTag(String label) {
-//		return hashtagService.getAllTweetsByTag(label);
-//	}
-	
-	
 	
 
 
