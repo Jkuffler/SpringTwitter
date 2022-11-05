@@ -15,7 +15,7 @@ public class Credentials {
 	
 	@NonNull
 	@Column(unique = true)
-	private String userName;
+	private String username;
 	
 	@NonNull
 	private String password;

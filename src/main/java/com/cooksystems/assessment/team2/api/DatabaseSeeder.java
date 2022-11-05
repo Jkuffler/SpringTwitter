@@ -34,7 +34,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 		 // --- User 1 ---
         // Credentials
         Credentials user1Cred = new Credentials();
-        user1Cred.setUserName("therealmc");
+        user1Cred.setUsername("therealmc");
         user1Cred.setPassword("Password");
 
         User user1 = new User();
@@ -54,7 +54,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         // --- User 2 ---
         // Credentials
         Credentials user2Cred = new Credentials();
-        user2Cred.setUserName("mario");
+        user2Cred.setUsername("mario");
         user2Cred.setPassword("password");
 
         User user2 = new User();
@@ -73,7 +73,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         // --- User 3 ---
         Credentials user3Cred = new Credentials();
         // Credentials
-        user3Cred.setUserName("Luigi");
+        user3Cred.setUsername("Luigi");
         user3Cred.setPassword("Password");
 
         User user3 = new User();
@@ -92,7 +92,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         // --- User 4 ---
         // Credentials
         Credentials user4Cred = new Credentials();
-        user4Cred.setUserName("Nathan");
+        user4Cred.setUsername("Nathan");
         user4Cred.setPassword("Password");
 
         User user4 = new User();
@@ -111,7 +111,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         // --- User 5 ---
         // Credentials
         Credentials user5Cred = new Credentials();
-        user5Cred.setUserName("Tarnished");
+        user5Cred.setUsername("Tarnished");
         user5Cred.setPassword("Password");
 
         User user5 = new User();
@@ -130,7 +130,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         // --- User 6 ---
         // Credentials
         Credentials deletedUserCred = new Credentials();
-        deletedUserCred.setUserName("DeletedUser");
+        deletedUserCred.setUsername("DeletedUser");
         deletedUserCred.setPassword("Password");
 
         User deletedUser = new User();
