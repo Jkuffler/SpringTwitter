@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("validate")
+@RequestMapping("/validate")
 public class ValidateController {
 
 	private final ValidateService validateService;

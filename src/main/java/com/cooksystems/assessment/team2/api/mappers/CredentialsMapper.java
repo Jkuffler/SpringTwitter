@@ -10,4 +10,9 @@ import com.cooksystems.assessment.team2.api.entities.Credentials;
 public interface CredentialsMapper {
 	
 	CredentialsDto entityToDto(Credentials entity);
+	
+	//tracked but not stashed or committed yet
+	Credentials credentialsDtoToEntity(CredentialsDto credentialsDto);
+	
+	
 }

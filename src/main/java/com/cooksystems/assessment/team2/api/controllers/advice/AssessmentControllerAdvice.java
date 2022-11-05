@@ -14,6 +14,7 @@ import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
 
 
+
 @ControllerAdvice(basePackages = { "com.cooksystems.assessment.team2.api.controllers"})
 @ResponseBody
 public class AssessmentControllerAdvice {

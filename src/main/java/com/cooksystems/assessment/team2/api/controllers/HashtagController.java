@@ -4,13 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksystems.assessment.team2.api.dtos.HashtagDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.services.HashtagService;
+
+
 import com.cooksystems.assessment.team2.api.services.TweetService;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +24,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("tags")
 public class HashtagController {
+
+
+	@Autowired
+	private final HashtagService hashtagService;
+
+	@GetMapping
+	public List<HashtagDto> getAllHashtags() {
+		return hashtagService.getAllHashtags();
+	};
+
+	@GetMapping("/{label}")
+	public List<TweetResponseDto> getgetAllHashtagsByLabel(@PathVariable String label) {
+		return hashtagService.getAllTweetsByHashtag(label);
+	}
+
 	
 	@Autowired
 	private HashtagService hashtagService;
@@ -41,5 +62,6 @@ public class HashtagController {
 	
 	
 	
+
 
 }
