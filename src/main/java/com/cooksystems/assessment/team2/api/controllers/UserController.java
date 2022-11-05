@@ -72,12 +72,22 @@ public class UserController {
 
 	}
 
+	/*
+	 * Retrieves the users followed by the user with the given username. 
+	 * Only active users should be included in the response. 
+	 * If no active user with the given username exists, an error should be sent in lieu of a response.
+	 */
 	@GetMapping("/@{username}/following")
 	public List<UserResponseDto> getFollowing(@PathVariable String username) {
 		return userService.getFollowing(username);
 
 	}
 
+	/*
+	 * Retrieves the followers of the user with the given username. 
+	 * Only active users should be included in the response. 
+	 * If no active user with the given username exists, an error should be sent in lieu of a response.
+	 */
 	@GetMapping("/@{username}/followers")
 	public List<UserResponseDto> getFollowers(@PathVariable String username) {
 		return userService.getFollowers(username);
@@ -94,17 +104,30 @@ public class UserController {
 		return userService.createUser(userRequestDto);
 	}
 
-	/*
-	 * "Deletes" a user with the given username. If no such user exists or the
-	 * provided credentials do not match the user, an error should be sent in lieu
-	 * of a response. If a user is successfully "deleted", the response should
-	 * contain the user data prior to deletion.
-	 */
-	@DeleteMapping("/@{username}")
-	public UserResponseDto deleteUser(@PathVariable String username, @RequestBody Credentials credentials) {
-		return userService.deleteUser(username, credentials);
-	}
 
+	
+	/*
+	 * Subscribes the user whose credentials are provided by the request body to the user whose username is given in the url. 
+	 * If there is already a following relationship between the two users, no such followable user exists (deleted or never created), 
+	 * or the credentials provided do not match an active user in the database, an error should be sent as a response. 
+	 * If successful, no data is sent.
+	 */
+	@PostMapping("/@{username}/follow")
+	public void follow(@PathVariable String username, @RequestBody Credentials credentials) {
+		userService.follow(username, credentials);
+	}
+	
+	/*
+	 * Unsubscribes the user whose credentials are provided by the request body from the user whose username is given in the url. 
+	 * If there is no preexisting following relationship between the two users, no such followable user exists (deleted or never created), 
+	 * or the credentials provided do not match an active user in the database, an error should be sent as a response. 
+	 * If successful, no data is sent.
+	 */
+	@PostMapping("/@{username}/unfollow")
+	public void unfollow(@PathVariable String username, @RequestBody Credentials credentials) {
+		userService.unfollow(username, credentials);
+	}
+	
 	/*
 	 * Updates the profile of a user with the given username. If no such user
 	 * exists, the user is deleted, or the provided credentials do not match the
@@ -112,18 +135,20 @@ public class UserController {
 	 * successful update, the returned user should contain the updated data.
 	 */
 	@PatchMapping("/@{username}")
-	public UserResponseDto updateUser(@PathVariable String username, @RequestBody UserRequestDto userRequestDto) {
-		return userService.updateUser(username, userRequestDto);
+	public UserResponseDto updateUserByUsername(@PathVariable String username, @RequestBody UserRequestDto userRequestDto) {
+		return userService.updateUserByUsername(username, userRequestDto);
 	}
 
-	@PostMapping("/@{username}/follow")
-	public void follow(@PathVariable String username, @RequestBody Credentials credentials) {
-		userService.follow(username, credentials);
-	}
-
-	@PostMapping("/@{username}/unfollow")
-	public void unfollow(@PathVariable String username, @RequestBody Credentials credentials) {
-		userService.unfollow(username, credentials);
+	
+	/*
+	 * "Deletes" a user with the given username. If no such user exists or the
+	 * provided credentials do not match the user, an error should be sent in lieu
+	 * of a response. If a user is successfully "deleted", the response should
+	 * contain the user data prior to deletion.
+	 */
+	@DeleteMapping("/@{username}")
+	public UserResponseDto deleteUserByUsername(@PathVariable String username, @RequestBody Credentials credentials) {
+		return userService.deleteUserByUsername(username, credentials);
 	}
 	
 	@GetMapping("/@{username}/mentions")
