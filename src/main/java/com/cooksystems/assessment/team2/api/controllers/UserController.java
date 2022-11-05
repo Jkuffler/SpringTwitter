@@ -150,5 +150,10 @@ public class UserController {
 	public UserResponseDto deleteUserByUsername(@PathVariable String username, @RequestBody Credentials credentials) {
 		return userService.deleteUserByUsername(username, credentials);
 	}
+	
+	@GetMapping("/@{username}/mentions")
+	public List<TweetResponseDto> getUserMentions(@PathVariable String username) {
+		return userService.getUserMentions(username);
+	}
 
 }
