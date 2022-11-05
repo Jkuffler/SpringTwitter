@@ -40,11 +40,8 @@ public class Hashtag {
 	@UpdateTimestamp
 	private Timestamp lastUsed;
 
-	@ManyToMany(cascade = CascadeType.MERGE)
-	@JoinTable(name = "tweet_hashtags", joinColumns = @JoinColumn(name = "hashtag_id"), inverseJoinColumns = @JoinColumn(name = "tweet_id"))
-	private List<Hashtag> hashtags;
+	@ManyToMany(mappedBy = "hashtags", cascade = CascadeType.ALL)
+	private List<Tweet> tweets;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	public List<Tweet> tweets;
 
 }

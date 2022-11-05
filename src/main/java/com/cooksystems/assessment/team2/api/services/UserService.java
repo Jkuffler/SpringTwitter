@@ -19,7 +19,7 @@ public interface UserService {
 
 	UserResponseDto getUserByUserName(String userName);
 
-	List<TweetResponseDto> getTweetsbyAuthor(String userName);
+	List<TweetResponseDto> getTweetsbyAuthor(String username);
 
 	void follow(String username, Credentials credentials);
 
