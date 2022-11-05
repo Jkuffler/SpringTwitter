@@ -7,7 +7,11 @@ import org.mapstruct.Mapper;
 import com.cooksystems.assessment.team2.api.dtos.HashtagDto;
 import com.cooksystems.assessment.team2.api.entities.Hashtag;
 
+
 @Mapper(componentModel = "spring", uses = { TweetMapper.class })
+
+@Mapper(componentModel = "spring")
+
 public interface HashtagMapper {
 
 	List<HashtagDto> entitiesToResponseDtos(List<Hashtag> hashtagList);

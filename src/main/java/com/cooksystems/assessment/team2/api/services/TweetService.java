@@ -3,6 +3,7 @@ package com.cooksystems.assessment.team2.api.services;
 import java.util.List;
 
 import com.cooksystems.assessment.team2.api.dtos.ContextDto;
+import com.cooksystems.assessment.team2.api.dtos.HashtagDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
@@ -33,6 +34,7 @@ public interface TweetService {
 	List<UserResponseDto> getTweetMentions(Long id);
 
 	ContextDto getTweetContext(Long id);
-	
+
+	List<HashtagDto> getHashtagsByTweetId(Long id);
 
 }

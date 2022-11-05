@@ -13,9 +13,9 @@ public interface UserService {
 
 	UserResponseDto createUser(UserRequestDto userRequestDto);
 
-	UserResponseDto updateUser(String username, UserRequestDto userRequestDto);
+	UserResponseDto updateUserByUsername(String username, UserRequestDto userRequestDto);
 
-	UserResponseDto deleteUser(String username, Credentials credentials);
+	UserResponseDto deleteUserByUsername(String username, Credentials credentials);
 
 	UserResponseDto getUserByUserName(String userName);
 
@@ -30,5 +30,7 @@ public interface UserService {
 	List<TweetResponseDto> getFeedByAuthor(String username);
 
 	List<UserResponseDto> getFollowing(String username);
+
+	List<TweetResponseDto> getUserMentions(String username);
 
 }

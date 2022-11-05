@@ -20,6 +20,7 @@ import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
 import com.cooksystems.assessment.team2.api.mappers.UserMapper;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
 import com.cooksystems.assessment.team2.api.services.UserService;
+import com.cooksystems.assessment.team2.api.services.ValidateService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +33,8 @@ public class UserServiceImpl implements UserService {
 	private final UserMapper userMapper;
 
 	private final TweetMapper tweetMapper;
+	
+	private final ValidateService validateService;
 
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUserNameAndDeletedFalse(username);
@@ -69,11 +72,29 @@ public class UserServiceImpl implements UserService {
 	public UserResponseDto createUser(UserRequestDto userRequestDto) {
 
 		User savedUser = userMapper.userRequestDtoToEntity(userRequestDto);
+
+		if (savedUser.getProfile() == null || savedUser.getCredentials() == null
+				|| savedUser.getCredentials().getUserName() == null
+				|| savedUser.getCredentials().getPassword() == null || savedUser.getProfile().getEmail() == null) {
+			throw new BadRequestException(
+					"All fields must contain a value.");
+		}
+		
+		boolean userExist = validateService.checkIfUserNameExists(savedUser.getCredentials().getUserName());
+		boolean userAvailable = validateService.checkIfUserNameAvailable(savedUser.getCredentials().getUserName());
+		
+		if (!userAvailable) {
+			throw new BadRequestException("User already exists");
+		} else if (userExist) {
+			User recreateUser = userRepository.findByCredentialsUserNameAndDeletedFalse(savedUser.getCredentials().getUserName()).get();
+			recreateUser.setDeleted(false);
+			return userMapper.entityToDto(userRepository.saveAndFlush(recreateUser));
+		}
 		return userMapper.entityToDto(userRepository.saveAndFlush(savedUser));
 	}
 
 	@Override
-	public UserResponseDto deleteUser(String username, Credentials credentials) {
+	public UserResponseDto deleteUserByUsername(String username, Credentials credentials) {
 		User userToDelete = findUser(username);
 
 		checkCredentials(credentials);
@@ -83,7 +104,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserResponseDto updateUser(String username, UserRequestDto userRequestDto) {
+	public UserResponseDto updateUserByUsername(String username, UserRequestDto userRequestDto) {
 		User userToUpdate = findUser(username);
 		User updates = userMapper.userRequestDtoToEntity(userRequestDto);
 
@@ -192,6 +213,15 @@ public class UserServiceImpl implements UserService {
 		Collections.reverse(listOfTweets);
 
 		return tweetMapper.entitiesToResponseDtos(listOfTweets);
+	}
+	
+	@Override
+	public List<TweetResponseDto> getUserMentions(String username) {
+		User user = findUser(username);
+		List<Tweet> mentions = user.getMentionedTweets();
+		Collections.sort(mentions);
+		Collections.reverse(mentions);
+		return tweetMapper.entitiesToResponseDtos(mentions);
 	}
 
 }

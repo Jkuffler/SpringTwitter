@@ -8,15 +8,18 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.cooksystems.assessment.team2.api.dtos.ContextDto;
+import com.cooksystems.assessment.team2.api.dtos.HashtagDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetRequestDto;
 import com.cooksystems.assessment.team2.api.dtos.TweetResponseDto;
 import com.cooksystems.assessment.team2.api.dtos.UserResponseDto;
 import com.cooksystems.assessment.team2.api.entities.Credentials;
+import com.cooksystems.assessment.team2.api.entities.Hashtag;
 import com.cooksystems.assessment.team2.api.entities.Tweet;
 import com.cooksystems.assessment.team2.api.entities.User;
 import com.cooksystems.assessment.team2.api.exceptions.BadRequestException;
 import com.cooksystems.assessment.team2.api.exceptions.NotAuthorizedException;
 import com.cooksystems.assessment.team2.api.exceptions.NotFoundException;
+import com.cooksystems.assessment.team2.api.mappers.HashtagMapper;
 import com.cooksystems.assessment.team2.api.mappers.TweetMapper;
 import com.cooksystems.assessment.team2.api.mappers.UserMapper;
 import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
@@ -33,6 +36,7 @@ public class TweetServiceImpl implements TweetService {
 	private final TweetMapper tweetMapper;
 	private final UserRepository userRepository;
 	private final UserMapper userMapper;
+	private final HashtagMapper hashTagMapper;
 
 	private Tweet findTweet(Long id) {
 		Optional<Tweet> optionalTweet = tweetRepository.findByIdAndDeletedFalse(id);
@@ -202,6 +206,15 @@ public class TweetServiceImpl implements TweetService {
 		
 		return context;
 	}
+	
+	@Override
+	public List<HashtagDto> getHashtagsByTweetId(Long id) {
+		Tweet tweetToFind = findTweet(id);
+		List<Hashtag> hashtagList = tweetToFind.getHashtags();
+			
+		return hashTagMapper.entitiesToResponseDtos(hashtagList);
+	}
+
 	
 	
 
