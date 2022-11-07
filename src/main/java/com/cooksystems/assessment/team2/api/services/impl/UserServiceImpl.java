@@ -1,6 +1,7 @@
 package com.cooksystems.assessment.team2.api.services.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import com.cooksystems.assessment.team2.api.mappers.UserMapper;
 import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
 import com.cooksystems.assessment.team2.api.services.UserService;
+import com.cooksystems.assessment.team2.api.services.ValidateService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
 	private final TweetMapper tweetMapper;
 	
-//	private final ValidateService validateService;
+	private final ValidateService validateService;
 
 	private User findUser(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
@@ -73,23 +75,35 @@ public class UserServiceImpl implements UserService {
 	public UserResponseDto createUser(UserRequestDto userRequestDto) {
 
 		if (userRequestDto.getCredentials() == null || userRequestDto.getCredentials().getUsername() == null
-				|| userRequestDto.getCredentials().getPassword() == null || userRequestDto.getProfile().getEmail() == null) {
-			throw new BadRequestException(
-					"All fields must contain a value.");
+				|| userRequestDto.getCredentials().getPassword() == null) {
+			throw new BadRequestException("No credentials present.");
+		}
+		if (userRequestDto.getProfile() == null) {
+			throw new NotAuthorizedException("No profile is present");
+		}
+					
+		User savedUser = userMapper.userRequestDtoToEntity(userRequestDto);
+		
+		List<User> listOfUser = userRepository.findAll();
+		for (User user : listOfUser) {
+			if (user.getCredentials().getUsername().equals(userRequestDto.getCredentials().getUsername()) &&
+					user.isDeleted()) {
+				savedUser = user;
+				savedUser.setDeleted(false);
+				return userMapper.entityToDto(userRepository.saveAndFlush(savedUser));
+			}
 		}
 		
-		User savedUser = userMapper.userRequestDtoToEntity(userRequestDto);
-//		
-//		boolean userExist = validateService.checkIfUserNameExists(userRequestDto.getCredentials().getUsername());
-//		boolean userAvailable = validateService.checkIfUserNameAvailable(userRequestDto.getCredentials().getUsername());
-//	
-//		if (!userAvailable) {
-//			throw new BadRequestException("User already exists");
-//		} else if (userExist) {
-//			User recreateUser = userRepository.findByCredentialsUserNameAndDeletedFalse(savedUser.getCredentials().getUsername()).get();
-//			recreateUser.setDeleted(false);
-//			return userMapper.entityToDto(userRepository.saveAndFlush(recreateUser));
-//		}
+		if (!(validateService.checkIfUserNameAvailable(savedUser.getCredentials().getUsername())) && !savedUser.isDeleted()) {
+			throw new NotAuthorizedException("Username not available");
+		}
+		if (savedUser.getCredentials().getUsername() == null || savedUser.getCredentials().getPassword() == null || 
+				savedUser.getProfile().getEmail() == null) {
+			throw new BadRequestException("Username, password, and email are required");
+			
+			
+		}
+
 		return userMapper.entityToDto(userRepository.saveAndFlush(savedUser));
 	}
 
@@ -193,8 +207,16 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserResponseDto> getFollowers(String username) {
-		User user = findUser(username);
-		return userMapper.entitiesToResponseDtos(user.getFollowers());
+//		User user = findUser(username);
+//		List<User> followers = user.getFollowers();
+//		for (User u : followers) {
+//			if (u.isDeleted()) {
+//				followers.remove(u);
+//			}
+//		}
+		
+		
+		return userMapper.entitiesToResponseDtos(findUser(username).getFollowers());
 	}
 
 	@Override
@@ -209,18 +231,23 @@ public class UserServiceImpl implements UserService {
 		checkCredentials(credentials);
 		User userToFollow = findUser(username);
 		User follower = findUser(credentials.getUsername());
-
-		List<User> following = follower.getFollowing();
-
-		if (following.contains(userToFollow)) {
-			throw new BadRequestException("You are already following the user.");
-		} else {
-			following.add(userToFollow);
+		if (userToFollow.isDeleted()) {
+			throw new NotFoundException("User deleted");
+		}
+		
+		if (!userToFollow.getFollowers().contains(follower)) {
+			userToFollow.getFollowers().add(follower);
+		}else {
+			throw new BadRequestException("Already followed!");
+			
+		}
+		if (!follower.getFollowing().contains(userToFollow)) {
+			follower.getFollowing().add(userToFollow);
+		}else {
+			throw new NotAuthorizedException("Already a follower");
 		}
 
-		follower.setFollowing(following);
-
-		userRepository.saveAndFlush(follower);
+		userRepository.saveAllAndFlush(Arrays.asList(follower, userToFollow));
 
 	}
 
@@ -229,19 +256,23 @@ public class UserServiceImpl implements UserService {
 		checkCredentials(credentials);
 		User userToUnfollow = findUser(username);
 		User unfollower = findUser(credentials.getUsername());
-
-		List<User> following = unfollower.getFollowing();
-
-		if (following.contains(userToUnfollow)) {
-			following.remove(userToUnfollow);
-		} else {
-			throw new BadRequestException("You are not following the user.");
+		if (userToUnfollow.isDeleted()) {
+			throw new NotFoundException("User deleted");
+		}
+		
+		if (userToUnfollow.getFollowers().contains(unfollower)) {
+			userToUnfollow.getFollowers().add(unfollower);
+		}else {
+			throw new BadRequestException("Already followed!");
+			
+		}
+		if (unfollower.getFollowing().contains(userToUnfollow)) {
+			unfollower.getFollowing().add(userToUnfollow);
+		}else {
+			throw new NotAuthorizedException("Already a follower");
 		}
 
-		unfollower.setFollowing(following);
-
-		userRepository.saveAndFlush(unfollower);
-
+		userRepository.saveAllAndFlush(Arrays.asList(unfollower, userToUnfollow));
 	}
 
 	@Override

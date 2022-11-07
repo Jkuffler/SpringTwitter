@@ -1,7 +1,7 @@
 package com.cooksystems.assessment.team2.api.services.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +74,9 @@ public class TweetServiceImpl implements TweetService {
 		}
 		
 		Tweet tweetToCreate = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
+		if (tweetRequestDto.getContent() == null) {
+			throw new BadRequestException("No content present");
+		}
 		User findAuthor = findUser(tweetRequestDto.getCredentials().getUsername());
 		tweetToCreate.setAuthor(findAuthor);
 		tweetToCreate.setContent(tweetRequestDto.getContent());
@@ -88,10 +91,13 @@ public class TweetServiceImpl implements TweetService {
 
 	@Override
 	public List<TweetResponseDto> getAllTweets() {
-		List<Tweet> listOfTweets = tweetRepository.findAllByDeletedFalse();
-		Collections.sort(listOfTweets);
-		Collections.reverse(listOfTweets);
-		return tweetMapper.entitiesToResponseDtos(listOfTweets);
+		List<Tweet> listOfActiveTweets = tweetRepository.findAll().stream()
+				.filter(tweet -> !tweet.isDeleted())
+				.sorted(Comparator.comparing(Tweet::getPosted))
+						.toList();
+		
+		
+		return tweetMapper.entitiesToResponseDtos(listOfActiveTweets);
 	}
 
 	@Override

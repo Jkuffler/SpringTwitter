@@ -39,9 +39,9 @@ public class ValidateServiceImpl implements ValidateService {
 		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
 		if (optionalUser.isEmpty()) {
 			System.out.println("Username " + username + " is not available.");
-			return false;
+			return true;
 		} 
-		return true;
+		return false;
 		
 	}
 
