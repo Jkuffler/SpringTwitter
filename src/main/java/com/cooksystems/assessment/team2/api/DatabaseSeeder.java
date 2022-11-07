@@ -1,17 +1,9 @@
 package com.cooksystems.assessment.team2.api;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.cooksystems.assessment.team2.api.entities.Credentials;
-import com.cooksystems.assessment.team2.api.entities.Hashtag;
-import com.cooksystems.assessment.team2.api.entities.Profile;
-import com.cooksystems.assessment.team2.api.entities.Tweet;
-import com.cooksystems.assessment.team2.api.entities.User;
 import com.cooksystems.assessment.team2.api.repositories.HashtagRepository;
 import com.cooksystems.assessment.team2.api.repositories.TweetRepository;
 import com.cooksystems.assessment.team2.api.repositories.UserRepository;
