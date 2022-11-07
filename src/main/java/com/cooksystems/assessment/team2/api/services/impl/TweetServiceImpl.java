@@ -65,18 +65,14 @@ public class TweetServiceImpl implements TweetService {
 			throw new NotAuthorizedException("Invalid credentials: " + credentials);
 		}
 	}
-	
-	private void checkTweetRequest(TweetRequestDto tweetRequestDto) {
-
-		if (tweetRequestDto.getCredentials() == null || tweetRequestDto.getCredentials().getUsername() == null
-				|| tweetRequestDto.getCredentials().getPassword() == null || tweetRequestDto.getContent() == null) {
-			throw new BadRequestException("Something you entered is null, try again.");
-		}
-
-	}
 
 	@Override
 	public TweetResponseDto postNewTweet(TweetRequestDto tweetRequestDto) {
+		if (tweetRequestDto.getCredentials() == null || tweetRequestDto.getCredentials().getUsername() == null
+				|| tweetRequestDto.getCredentials().getPassword() == null || tweetRequestDto.getContent() == null) {
+			throw new BadRequestException("All fields must contain a value.");
+		}
+		
 		Tweet tweetToCreate = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
 		User findAuthor = findUser(tweetRequestDto.getCredentials().getUsername());
 		tweetToCreate.setAuthor(findAuthor);
@@ -137,7 +133,7 @@ public class TweetServiceImpl implements TweetService {
 		TweetRequestDto tweetRequest = tweetMapper.entityToRequestDto(tweetToRepost);
 		checkCredentials(credentials);
 		Tweet repostedTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequest);
-
+		
 		User user = findUser(credentials.getUsername());
 		repostedTweet.setAuthor(user);
 		repostedTweet.setContent(tweetToRepost.getContent());
@@ -158,7 +154,10 @@ public class TweetServiceImpl implements TweetService {
 	public TweetResponseDto tweetReply(Long id, TweetRequestDto tweetRequestDto) {
 		Tweet tweetToReplyTo = findTweet(id);
 
-		checkTweetRequest(tweetRequestDto);
+		if (tweetRequestDto.getCredentials() == null || tweetRequestDto.getCredentials().getUsername() == null
+				|| tweetRequestDto.getCredentials().getPassword() == null || tweetRequestDto.getContent() == null) {
+			throw new BadRequestException("All fields must contain a value.");
+		}
 		
 		User user = findUser(tweetRequestDto.getCredentials().getUsername());
 		Tweet replyTweet = tweetMapper.tweetRequestDtoToEntity(tweetRequestDto);
